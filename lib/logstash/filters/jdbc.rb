@@ -43,6 +43,7 @@ class LogStash::Filters::Jdbc < LogStash::Filters::Base
 
   public
   def register
+    @logger = self.logger
     prepare_jdbc_connection()
   end # def register
 
@@ -50,18 +51,17 @@ class LogStash::Filters::Jdbc < LogStash::Filters::Base
   def filter(event)
     result = []
     #Prepare parameters from event values
-    params = @parameters.inject({}) {|hash,(k,v)| hash[k] = event[event.sprintf(v)] ; hash }
+    params = @parameters.inject({}) {|hash,(k,v)| hash[k] = event.get(event.sprintf(v)) ; hash }
     #Execute statement and collect results
     success = execute_statement(@statement,params) do |row|
       result << row
     end
     if success
-      event[@target] = result
+      event.set(@target, result)
       filter_matched(event)
     else
       @tag_on_failure.each do |tag|
-        event["tags"] ||= []
-        event["tags"] << tag unless event["tags"].include?(tag)
+        event.tag(tag)
       end
     end
   end # def filter

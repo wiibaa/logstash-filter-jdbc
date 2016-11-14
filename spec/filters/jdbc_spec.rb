@@ -19,7 +19,7 @@ describe LogStash::Filters::Jdbc do
     end
 
     sample("message" => "some text") do
-      expect(subject['new_field']).to eq([{"1" => 'from_database'}])
+      expect(subject.get('new_field')).to eq([{"1" => 'from_database'}])
     end
   end
 
@@ -37,7 +37,7 @@ describe LogStash::Filters::Jdbc do
     end
 
     sample("message" => "some text") do
-      expect(subject['new_field']).to eq([{"col_1" => 'from_database'}])
+      expect(subject.get('new_field')).to eq([{"col_1" => 'from_database'}])
     end
   end
 
@@ -56,11 +56,11 @@ describe LogStash::Filters::Jdbc do
     end
 
     sample("message" => "some text", "param_field" => "1") do
-      expect(subject['new_field']).to eq([{"1" => 'from_database'}])
+      expect(subject.get('new_field')).to eq([{"1" => 'from_database'}])
     end
 
     sample("message" => "some text", "param_field" => "2") do
-      expect(subject['new_field'].nil?)
+      expect(subject.get('new_field').nil?)
     end
   end
 
@@ -79,11 +79,11 @@ describe LogStash::Filters::Jdbc do
     end
 
     sample("message" => "some text", "param_field" => 1) do
-      expect(subject['new_field']).to eq([{"1" => 'from_database'}])
+      expect(subject.get('new_field')).to eq([{"1" => 'from_database'}])
     end
 
     sample("message" => "some text", "param_field" => "1") do
-      expect(subject['new_field'].nil?)
+      expect(subject.get('new_field').nil?)
     end
   end
 
@@ -102,7 +102,7 @@ describe LogStash::Filters::Jdbc do
     end
 
     sample("message" => "some text") do
-      expect(subject['new_field']).to eq([{"1" => 'from_database'}])
+      expect(subject.get('new_field')).to eq([{"1" => 'from_database'}])
     end
   end
 end
